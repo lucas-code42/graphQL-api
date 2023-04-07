@@ -1,0 +1,5 @@
+use admin
+db.auth('root', passwordPrompt())
+use db_test
+db.createCollection("test_api")
+show dbs
