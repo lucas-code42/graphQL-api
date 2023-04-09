@@ -1,5 +1,10 @@
+// switch to admin
 use admin
 db.auth('root', passwordPrompt())
+
+// create db
 use db_test
 db.createCollection("test_api")
 show dbs
+
+// insert
