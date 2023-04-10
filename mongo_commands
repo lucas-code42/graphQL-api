@@ -4,7 +4,5 @@ db.auth('root', passwordPrompt())
 
 // create db
 use db_test
-db.createCollection("test_api")
+db.createCollection("account")
 show dbs
-
-// insert
