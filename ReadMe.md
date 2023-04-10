@@ -1,1 +1,1 @@
-GraphQl api using golang 
+GraphQl api using golang and mongoDB
