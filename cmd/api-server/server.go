@@ -44,6 +44,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Erro ao se conectar com MongoDB", err)
 	}
+	defer c.Disconnect(context.Background())
 
 	ac := mongoDatabase.InitMongo(c)
 
