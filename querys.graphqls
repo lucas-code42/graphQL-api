@@ -1,5 +1,5 @@
 mutation createAccount {
-    createAccount(input: {name: "yas", programmingLanguage: "html & css"}) {
+    createAccount(input: {name: "linux ubunbtu", programmingLanguage: "Python & Java"}) {
         name
         programmingLanguage
     }
