@@ -1,0 +1,13 @@
+mutation createAccount {
+    createAccount(input: {name: "yas", programmingLanguage: "html & css"}) {
+        name
+        programmingLanguage
+    }
+}
+
+query queryAccount {
+    Accounts {
+        name
+        programmingLanguage
+    }
+}
