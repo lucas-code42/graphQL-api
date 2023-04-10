@@ -2,7 +2,6 @@ package mongoDatabase
 
 import (
 	"context"
-	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
@@ -35,26 +34,21 @@ func (a *Account) GetAll() ([]Account, error) {
 	}
 	defer cur.Close(ctx)
 
-	var testAPI []Account
+	var accounts []Account
 	for cur.Next(ctx) {
 		var tmp Account
 		if err := cur.Decode(&tmp); err != nil {
 			log.Fatal("** 5 **", err)
 		}
 
-		testAPI = append(testAPI, tmp)
+		accounts = append(accounts, tmp)
 	}
 
 	if err := cur.Err(); err != nil {
 		log.Fatal("** 6 **", err)
 	}
 
-	for _, v := range testAPI {
-		fmt.Println(v.Name)
-		fmt.Println(v.ProgrammingLanguage)
-	}
-
-	return testAPI, nil
+	return accounts, nil
 }
 
 func (a *Account) Insert(name, programmingLanguage string) (Account, error) {

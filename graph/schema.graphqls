@@ -9,8 +9,7 @@ input NewAccount {
 }
 
 type Query {
-  name: String!
-  programmingLanguage: String!
+  Accounts: [Account!]!
 }
 
 type Mutation {

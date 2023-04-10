@@ -6,8 +6,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
-
 	"github.com/lucas-code42/graphql-api/graph/model"
 )
 
@@ -23,14 +21,22 @@ func (r *mutationResolver) CreateAccount(ctx context.Context, input model.NewAcc
 	}, nil
 }
 
-// Name is the resolver for the name field.
-func (r *queryResolver) Name(ctx context.Context) (string, error) {
-	panic(fmt.Errorf("not implemented: Name - name"))
-}
+// Accounts is the resolver for the Accounts field.
+func (r *queryResolver) Accounts(ctx context.Context) ([]*model.Account, error) {
+	accounts, err := r.Account.GetAll()
+	if err != nil {
+		return nil, err
+	}
 
-// ProgrammingLanguage is the resolver for the programmingLanguage field.
-func (r *queryResolver) ProgrammingLanguage(ctx context.Context) (string, error) {
-	panic(fmt.Errorf("not implemented: ProgrammingLanguage - programmingLanguage"))
+	var modelAccounts []*model.Account
+	for _, v := range accounts {
+		modelAccounts = append(modelAccounts, &model.Account{
+			Name:                v.Name,
+			ProgrammingLanguage: v.ProgrammingLanguage,
+		})
+	}
+
+	return modelAccounts, nil
 }
 
 // Mutation returns MutationResolver implementation.
