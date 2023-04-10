@@ -4,63 +4,29 @@ import (
 	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
-	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type TestAPI struct {
-	_Id                 string `bson:"_id"`
-	Name                string `bson:"name"`
-	ProgrammingLanguage string `bson:"programmingLanguage"`
+type Account struct {
+	db                  *mongo.Client
+	ID                  primitive.ObjectID `bson:"_id,omitempty"`
+	Name                string             `bson:"name"`
+	ProgrammingLanguage string             `bson:"programmingLanguage"`
 }
 
-const uri = "mongodb://root:example@localhost:27017/?connect=direct"
-
-func connect() (*mongo.Client, error) {
-	dbURL := os.Getenv("MONGO_URL")
-	fmt.Println(dbURL)
-
-	// Set client options
-	clientOptions := options.Client()
-	clientOptions.SetDirect(true).ApplyURI(uri)
-
-	// Connect to MongoDB
-	client, err := mongo.Connect(context.TODO(), clientOptions)
-
-	if err != nil {
-		log.Fatal("** 1 **", err)
-	}
-
-	// Check the connection
-	err = client.Ping(context.TODO(), nil)
-
-	if err != nil {
-		log.Fatal("** 2 **", err)
-	}
-	// Return successful connection
-	return client, nil
-
+func InitMongo(db *mongo.Client) *Account {
+	return &Account{db: db}
 }
 
-func GetAll() ([]TestAPI, error) {
+func (a *Account) GetAll() ([]Account, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	client, err := connect()
-	if err != nil {
-		log.Fatal("** 3 **", err)
-	}
-	defer func() {
-		if err = client.Disconnect(ctx); err != nil {
-			panic(err)
-		}
-	}()
-
-	collection := client.Database("account").Collection("test_api")
+	collection := a.db.Database("account").Collection("test_api")
 	filter := bson.M{}
 
 	cur, err := collection.Find(ctx, filter)
@@ -69,9 +35,9 @@ func GetAll() ([]TestAPI, error) {
 	}
 	defer cur.Close(ctx)
 
-	var testAPI []TestAPI
+	var testAPI []Account
 	for cur.Next(ctx) {
-		var tmp TestAPI
+		var tmp Account
 		if err := cur.Decode(&tmp); err != nil {
 			log.Fatal("** 5 **", err)
 		}
@@ -83,11 +49,29 @@ func GetAll() ([]TestAPI, error) {
 		log.Fatal("** 6 **", err)
 	}
 
-	//for _, v := range testAPI {
-	//	fmt.Println(v.Name)
-	//	fmt.Println(v.ProgrammingLanguage)
-	//}
+	for _, v := range testAPI {
+		fmt.Println(v.Name)
+		fmt.Println(v.ProgrammingLanguage)
+	}
 
 	return testAPI, nil
+}
 
+func (a *Account) Insert(name, programmingLanguage string) (Account, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	collection := a.db.Database("account").Collection("test_api")
+	insert := Account{
+		ID:                  primitive.NewObjectID(),
+		Name:                name,
+		ProgrammingLanguage: programmingLanguage,
+	}
+
+	_, err := collection.InsertOne(ctx, insert)
+	if err != nil {
+		return Account{}, err
+	}
+
+	return insert, nil
 }

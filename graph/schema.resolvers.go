@@ -13,7 +13,14 @@ import (
 
 // CreateAccount is the resolver for the createAccount field.
 func (r *mutationResolver) CreateAccount(ctx context.Context, input model.NewAccount) (*model.Account, error) {
-	panic(fmt.Errorf("not implemented: CreateAccount - createAccount"))
+	account, err := r.Account.Insert(input.Name, input.ProgrammingLanguage)
+	if err != nil {
+		return nil, err
+	}
+	return &model.Account{
+		Name:                account.Name,
+		ProgrammingLanguage: account.ProgrammingLanguage,
+	}, nil
 }
 
 // Name is the resolver for the name field.
