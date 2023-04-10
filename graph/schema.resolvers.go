@@ -11,14 +11,19 @@ import (
 	"github.com/lucas-code42/graphql-api/graph/model"
 )
 
-// CreateTodo is the resolver for the createTodo field.
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
+// CreateAccount is the resolver for the createAccount field.
+func (r *mutationResolver) CreateAccount(ctx context.Context, input model.NewAccount) (*model.Account, error) {
+	panic(fmt.Errorf("not implemented: CreateAccount - createAccount"))
 }
 
-// Todos is the resolver for the todos field.
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: Todos - todos"))
+// Name is the resolver for the name field.
+func (r *queryResolver) Name(ctx context.Context) (string, error) {
+	panic(fmt.Errorf("not implemented: Name - name"))
+}
+
+// ProgrammingLanguage is the resolver for the programmingLanguage field.
+func (r *queryResolver) ProgrammingLanguage(ctx context.Context) (string, error) {
+	panic(fmt.Errorf("not implemented: ProgrammingLanguage - programmingLanguage"))
 }
 
 // Mutation returns MutationResolver implementation.
