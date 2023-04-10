@@ -14,7 +14,7 @@ const defaultPort = "8080"
 
 func main() {
 	fmt.Println("antes")
-	mongoDatabase.Connect()
+	mongoDatabase.GetAll()
 	fmt.Println("depois")
 
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
